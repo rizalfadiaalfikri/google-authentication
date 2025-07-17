@@ -95,6 +95,7 @@ public class GoogleApiClient {
         try {
 
             String clientId = ConfigReader.getClientIdFromYaml("application.yml");
+            System.out.println("clientId: " + clientId);
 
             if (clientId == null || clientId.isEmpty()) {
                 throw new IllegalStateException("Client ID not found in configuration.");
