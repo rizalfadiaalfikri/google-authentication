@@ -94,14 +94,7 @@ public class GoogleApiClient {
     public static GoogleIdTokenVerifier getVerifier() {
         try {
 
-            String configType = System.getProperty("config.type"); // "properties" atau "yaml"
-
-            String clientId = null;
-            if ("yaml".equalsIgnoreCase(configType)) {
-                clientId = ConfigReader.getClientIdFromYaml("application.yml");
-            } else {
-                clientId = ConfigReader.getClientIdFromProperties("application.properties");
-            }
+            String clientId = ConfigReader.getClientIdFromYaml("application.yml");
 
             if (clientId == null || clientId.isEmpty()) {
                 throw new IllegalStateException("Client ID not found in configuration.");
