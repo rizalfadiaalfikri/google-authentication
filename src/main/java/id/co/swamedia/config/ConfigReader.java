@@ -5,16 +5,12 @@ import java.io.InputStream;
 import java.util.Map;
 import java.util.Properties;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 /**
  * Utility class for reading configuration files.
  */
 public class ConfigReader {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConfigReader.class);
 
     /**
      * Reads the client ID from the application.properties file.
@@ -26,8 +22,7 @@ public class ConfigReader {
         Properties properties = new Properties();
         try (InputStream input = ConfigReader.class.getClassLoader().getResourceAsStream(filename)) {
             if (input == null) {
-                logger.error("Sorry, unable to find {}", filename);
-                return null;
+                throw new IllegalArgumentException("Sorry, unable to find: " + filename);
             }
             properties.load(input);
             return properties.getProperty("google.client-id");
@@ -53,8 +48,7 @@ public class ConfigReader {
                 Object clientId = google.get("client-id");
                 return clientId != null ? clientId.toString() : null;
             } else {
-                logger.error("'google' section not found or is not a map in {}", filename);
-                return null;
+                throw new IllegalArgumentException("'google' section not found or is not a map in " + filename);
             }
         } catch (Exception e) {
             e.printStackTrace();

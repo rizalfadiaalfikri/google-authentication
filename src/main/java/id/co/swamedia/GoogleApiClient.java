@@ -7,9 +7,6 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collections;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdToken;
 import com.google.api.client.googleapis.auth.oauth2.GoogleIdTokenVerifier;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
@@ -25,8 +22,6 @@ import id.co.swamedia.config.ConfigReader;
  * using access tokens and verifying ID tokens from Google One Tap.
  */
 public class GoogleApiClient {
-
-    private static final Logger logger = LoggerFactory.getLogger(GoogleApiClient.class);
 
     /**
      * Sends a GET request to Google's user info endpoint using a provided access
@@ -74,22 +69,19 @@ public class GoogleApiClient {
             // Setup token verifier with your Google Client ID
             GoogleIdTokenVerifier verifier = getVerifier();
             if (verifier == null) {
-                logger.error("Failed to create GoogleIdTokenVerifier.");
-                return null;
+                throw new IllegalStateException("Failed to create GoogleIdTokenVerifier.");
             }
 
             // Verify and parse the ID token
             GoogleIdToken idToken = verifier.verify(accessToken);
             if (idToken == null) {
-                logger.error("Invalid ID token.");
+                throw new IllegalStateException("Invalid ID token.");
             }
 
             return idToken;
 
         } catch (Exception e) {
-            logger.error("Error validating access token: {}", e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new IllegalStateException("Error validating access token." + e.getMessage());
         }
     }
 
@@ -112,8 +104,7 @@ public class GoogleApiClient {
             }
 
             if (clientId == null || clientId.isEmpty()) {
-                logger.error("Client ID not found in configuration.");
-                return null;
+                throw new IllegalStateException("Client ID not found in configuration.");
             }
 
             // Initialize Google's HTTP and JSON parsing libraries
@@ -126,9 +117,7 @@ public class GoogleApiClient {
                     .build();
 
         } catch (Exception e) {
-            logger.error("Error creating token verifier: {}", e.getMessage());
-            e.printStackTrace();
-            return null;
+            throw new IllegalStateException("Error creating token verifier: " + e.getMessage());
         }
     }
 }

@@ -6,5 +6,6 @@ package id.co.swamedia;
  */
 public class App {
     public static void main(String[] args) {
+        
     }
 }
