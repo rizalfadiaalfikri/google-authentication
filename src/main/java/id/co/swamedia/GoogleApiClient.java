@@ -43,15 +43,14 @@ public class GoogleApiClient {
             String targetUrl = Constants.GOOGLE_API + "?access_token=" + accessToken;
 
             // Create and send HTTP GET request
-            try (HttpClient client = HttpClient.newHttpClient()) {
-                HttpRequest request = HttpRequest.newBuilder()
-                        .uri(URI.create(targetUrl))
-                        .GET()
-                        .header("Accept", "application/json")
-                        .build();
+            HttpClient client = HttpClient.newHttpClient(); // Inisialisasi di luar try-with-resources
+            HttpRequest request = HttpRequest.newBuilder()
+                    .uri(URI.create(targetUrl))
+                    .GET()
+                    .header("Accept", "application/json")
+                    .build();
 
-                return client.send(request, HttpResponse.BodyHandlers.ofString());
-            }
+            return client.send(request, HttpResponse.BodyHandlers.ofString());
 
         } catch (IOException | InterruptedException e) {
             // Restore interrupt status if InterruptedException occurs
